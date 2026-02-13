@@ -1,0 +1,109 @@
+# Smart Alert Configuration
+# Optimized for relevant notifications only
+
+alert_rules:
+  # 1. NEW PERSON ARRIVED (Text only)
+  new_person:
+    enabled: true
+    type: text_only
+    trigger: person_not_seen_before
+    cooldown_minutes: 5
+    message_template: "🚶 {person} chegou à {camera} ({time})"
+    priority: high
+    
+  # 2. PERSON LEFT (Text only)
+  person_left:
+    enabled: true
+    type: text_only
+    trigger: person_disappeared
+    cooldown_minutes: 10
+    message_template: "👋 {person} saiu de {camera} ({time})"
+    priority: medium
+    
+  # 3. UNKNOWN PERSON (Text + optional image)
+  unknown_person:
+    enabled: true
+    type: text_only  # No image to save bandwidth
+    trigger: unknown_face_detected
+    message_template: "⚠️ Pessoa desconhecida na {camera} ({time})"
+    priority: high
+    
+  # 4. ANOMALY DETECTED (Text only)
+  anomaly:
+    enabled: true
+    type: text_only
+    trigger: behavioral_anomaly
+    message_template: "🚨 Anomalia: {description} ({time})"
+    priority: high
+    
+  # 5. HOUSE EMPTY (Text only)
+  house_empty:
+    enabled: true
+    type: text_only
+    trigger: no_person_detected_30min
+    message_template: "🏠 Casa vazia há 30 minutos"
+    priority: low
+    
+  # 6. ACTIVITY SUMMARY (Daily digest)
+  daily_summary:
+    enabled: true
+    type: scheduled
+    schedule: "22:00"
+    include_images: true
+    message_template: "📊 Resumo do dia - {date}"
+    
+  # Suppressed alerts (not sent)
+  suppressed:
+    - same_person_same_location  # Augusto no sofá há 2h
+    - minor_movements            # Mesma pessoa a mover-se
+    - low_confidence_detections  # Confiança < 0.7
+    - repeated_scenes            # Cena idêntica anterior
+
+smart_filtering:
+  # Only alert if:
+  min_confidence: 0.7
+  min_time_between_alerts: 300  # 5 minutes
+  ignore_if_same_scene: true
+  ignore_minor_movements: true
+  
+  # Exception: Always alert for:
+  always_alert:
+    - unknown_person
+    - anomaly_detected
+    - security_event
+    - door_opened_unexpected
+
+training_mode:
+  # Daily training digest
+  enabled: true
+  schedule: "22:30"
+  num_images: 10  # Send 10 interesting images for tagging
+  selection_criteria:
+    - different_people
+    - different_angles
+    - different_lighting
+    - unclear_detections
+  
+  message_template: |
+    📸 Imagens do dia para treino
+    
+    Por favor identifica:
+    1. Quem está em cada imagem?
+    2. O que estão a fazer?
+    3. Alguma informação útil?
+    
+    Obrigado por ajudar a melhorar o sistema! 🤖
+
+quiet_hours:
+  enabled: true
+  start: "23:00"
+  end: "07:00"
+  allowed_alerts:
+    - security_breach
+    - anomaly_high_priority
+    - emergency
+  
+image_settings:
+  send_with_alerts: false  # Text only for real-time
+  resolution: "medium"      # For daily digest
+  max_per_day: 10          # Training images

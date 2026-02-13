@@ -1,0 +1,131 @@
+# VigilHome Advanced Automations
+# Config: excludes broken 'estore cozinha'
+
+available_blinds:
+  - estore_sala_tv
+  - estore_sala_varanda
+  - estore_quarto_pais
+  - estore_quarto_rita
+  - estore_escritorio
+  - estorr_vicente
+  # NOT estore_cozinha (broken/stuck)
+
+automations:
+  # 1. Privacy Mode - Close blinds when person detected
+  privacy_mode:
+    enabled: true
+    description: "Close blinds when cameras detect people (privacy)"
+    triggers:
+      - type: person_detected
+        cameras: [sala, cozinha]
+    actions:
+      - action: close_blinds
+        rooms: [sala, escritorio]
+        delay_seconds: 5
+    exceptions:
+      - condition: time_between
+        start: "08:00"
+        end: "18:00"
+        action: do_nothing  # Don't close during day
+
+  # 2. Night Mode - Close all at 23:00
+  night_mode:
+    enabled: true
+    description: "Close all blinds at night"
+    triggers:
+      - type: time
+        time: "23:00"
+    actions:
+      - action: close_all_blinds
+        exclude: [estore_cozinha]  # Broken
+
+  # 3. Morning Mode - Open blinds at sunrise (07:30)
+  morning_mode:
+    enabled: true
+    description: "Open blinds in morning"
+    triggers:
+      - type: time
+        time: "07:30"
+    actions:
+      - action: open_blinds
+        rooms: [sala, quarto_pais]
+        exclude: [estore_cozinha]
+
+  # 4. Cinema Mode - Close all when TV watching detected
+  cinema_mode:
+    enabled: true
+    description: "Close blinds when watching TV"
+    triggers:
+      - type: scene_detected
+        keywords: ["tv", "television", "watching", "sofa"]
+    actions:
+      - action: close_blinds
+        rooms: [sala]
+        exclude: [estore_cozinha]
+
+  # 5. Arrival Detection - Open when Augusto arrives
+  arrival_augusto:
+    enabled: true
+    description: "Open blinds when Augusto arrives home"
+    triggers:
+      - type: person_identified
+        person: "augusto"
+        camera: "sala"
+    actions:
+      - action: open_blinds
+        rooms: [sala]
+        exclude: [estore_cozinha]
+
+  # 6. Absence Mode - Close when house empty > 30 min
+  absence_mode:
+    enabled: true
+    description: "Close blinds when house is empty"
+    triggers:
+      - type: no_person_detected
+        duration_minutes: 30
+    actions:
+      - action: close_all_blinds
+        exclude: [estore_cozinha]
+
+  # 7. Security Mode - Partial close at 22:00
+  security_mode:
+    enabled: true
+    description: "Close ground floor blinds for security"
+    triggers:
+      - type: time
+        time: "22:00"
+    actions:
+      - action: close_blinds
+        rooms: [sala]
+        exclude: [estore_cozinha]
+
+# Telegram Commands
+commands:
+  - name: "fecha estores"
+    action: close_all_blinds
+    exclude: [estore_cozinha]
+  
+  - name: "abre estores"
+    action: open_all_blinds
+    exclude: [estore_cozinha]
+  
+  - name: "modo cinema"
+    action: close_blinds
+    rooms: [sala, escritorio]
+    exclude: [estore_cozinha]
+  
+  - name: "bom dia"
+    action: open_blinds
+    rooms: [sala, quarto_pais, quarto_rita]
+    exclude: [estore_cozinha]
+  
+  - name: "boa noite"
+    action: close_all_blinds
+    exclude: [estore_cozinha]
+
+# Settings
+settings:
+  default_open_percentage: 100
+  default_close_percentage: 0
+  transition_time_seconds: 30
+  safety_delay_between_blinds: 2

@@ -18,6 +18,12 @@ CAMERAS = {
         "ip": "192.168.86.51",
         "location": "Cozinha",
         "zones": ["porta", "balcao", "mesa"]
+    },
+    "exterior": {
+        "ip": "192.168.86.78",
+        "location": "Exterior",
+        "zones": ["entrada", "jardim", "portao"],
+        "status": "pending"  # Not responding yet
     }
 }
 

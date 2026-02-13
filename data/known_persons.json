@@ -1,0 +1,87 @@
+{
+  "persons": [
+    {
+      "id": "augusto",
+      "name": "Augusto",
+      "relationship": "owner",
+      "descriptions": [
+        "man wearing blue jacket",
+        "man in pajama pants",
+        "man with blue coat"
+      ],
+      "first_seen": "2026-02-13T20:22:00",
+      "cameras": ["cozinha", "sala"],
+      "confidence": 0.85
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "relationship": "family",
+      "descriptions": [
+        "woman in living room",
+        "person near television",
+        "person on sofa",
+        "person on couch",
+        "woman sitting",
+        "woman wearing white coat",
+        "woman wearing white jacket",
+        "woman in blue pants",
+        "woman with white coat sitting on sofa",
+        "person wearing socks sitting on couch",
+        "sofia sitting on couch white sweater",
+        "woman sitting blue pants white top"
+      ],
+      "first_seen": "2026-02-13T20:22:42",
+      "cameras": ["cozinha", "sala"],
+      "confidence": 0.80
+    },
+    {
+      "id": "maria_rita",
+      "name": "Maria Rita",
+      "relationship": "family",
+      "role": "daughter",
+      "age_group": "teenager",
+      "descriptions": [
+        "teenager in living room",
+        "young person",
+        "teenager in sala",
+        "teenager wearing blue jeans",
+        "teenager in white sweater",
+        "teenager with blue pants white top",
+        "girl in blue jeans",
+        "young woman in white camisola",
+        "teenager standing",
+        "maria rita standing blue jeans",
+        "teenager near door",
+        "teenager standing near entrance",
+        "maria rita junto a porta",
+        "teenager 170cm tall",
+        "slim girl",
+        "long wavy brown hair",
+        "cabelo comprido ondulado castanho",
+        "altura 1.70 magra"
+      ],
+      "first_seen": "2026-02-13T20:40:59",
+      "cameras": ["sala"],
+      "confidence": 0.75,
+      "notes": "First detected 2026-02-13, teenager, daughter"
+    },
+    {
+      "id": "vicente",
+      "name": "Vicente",
+      "relationship": "family",
+      "role": "son",
+      "age_group": "adult",
+      "status": "abroad",
+      "location": "USA",
+      "descriptions": [
+        "young man",
+        "adult male"
+      ],
+      "first_seen": "2026-02-13T20:22:00",
+      "cameras": [],
+      "confidence": 0.0,
+      "notes": "Currently in USA, not expected in Portugal"
+    }
+  ]
+}
